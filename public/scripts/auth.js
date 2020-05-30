@@ -15,7 +15,6 @@ auth.onAuthStateChanged(user => {
       console.log(snapshot.data());
       setupTasks(snapshot.data())
       setupUI(user)
-      // removeTransaction(snapshot.data())
     }, err => {console.log(err.message)})
     
   }else{
@@ -37,9 +36,6 @@ signupForm.addEventListener('submit', (e) => {
   const email = signupForm['signup-email'].value
   const password = signupForm['signup-password'].value
 
-  // db.collection('randomUsers').add({
-  //   username: signupForm['signup-email'].value
-  // })
 
   // signup user
   auth.createUserWithEmailAndPassword(email, password).then(cred => {
@@ -58,6 +54,9 @@ signupForm.addEventListener('submit', (e) => {
     signupForm.reset()
      setupTasks(userID)
      setupUI(user)
+  }).catch(err => {
+    console.log(err);
+    M.toast({html: err})
   })
 })
 
@@ -78,17 +77,17 @@ loginForm.addEventListener('submit', (e) => {
 
   auth.signInWithEmailAndPassword(email, password).then(cred =>{
     // close modal with materialize
-    console.log('loged in');
-    console.log(cred);
     const modal = document.querySelector('#modal-login')
     M.Modal.getInstance(modal).close()
     loginForm.reset()
 
+  }).catch(err => {
+    console.log(err);
+    M.toast({html: err})
   })
 })
 
 // ADD ID TO EACH TASK
-// You need to create task: {task1: xxx, id: Math.random}
 // 5. Generate random ID
 function GenerateID() {
   return Math.floor(Math.random() * 100000000)
@@ -102,21 +101,15 @@ createForm.addEventListener('submit', (e) => {
 
   const USERid = UID.firestore.QT.credentials.currentUser.uid
   console.log(USERid);
-  // db.collection('tasks').doc('bottles').collection('thingstodo').doc('things').set
+
   let transaction = {
     tasks: createForm['title'].value,
     id: GenerateID()
   }
-  // let taskArray = []
-  // taskArray.push(transaction)
+
   let addStuff =   db.collection('accounts').doc(USERid)
   addStuff.update({
     toDo: firebase.firestore.FieldValue.arrayUnion(transaction)
-    
-  // })
-
-  // db.collection('accounts').doc(USERid).add({
-  //   task: createForm['title'].value
   }).then(() => {
     // close modal
     const modal = document.querySelector('#modal-create')

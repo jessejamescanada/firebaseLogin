@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
 const setupUI = (user) => {
   if(user){
     console.log('USER ', user);
-    accountDetails.innerHTML = `<h5>Logged in as: ${user.email}</h5>`
+    accountDetails.innerHTML = `<h5 class='light-blue-text'>Logged in as: <span class='blue-text text-darken-3'>${user.email}</span></h5>`
     // toggle UI elements
     loggedInLinks.forEach(item => item.style.display = 'block')
     loggedOutLinks.forEach(item => item.style.display = 'none')
@@ -49,64 +49,68 @@ const removeTransaction = (id) => {
   addStuff.update({
     toDo: things.toDo.filter(item => item.id !== id)
   })
-
 }
 
 
+// toggle class for 'check' on tasks
+guideList.addEventListener('click', function(ev){
+  if(ev.target.classList.contains('chew')){
+    console.log('object');
+    ev.target.classList.toggle('checked')
+    ev.target.classList.toggle('lighten-4')
+  }
+}, false)
 
+
+const sToggle = document.querySelector('.sToggle')
 // setup tasks
 const setupTasks = (data) => {
+  let taskLength = document.querySelector('.tasks')
   console.log('data ', data.toDo);
   console.log('data ID ', data.id);
 things = data
   if (data.toDo){
+    taskLength.innerHTML = data.toDo.length
+    if(data.toDo.length === 1){
+      sToggle.style.display = 'none'
+    }else{
+      sToggle.style.display = 'inline-block'
+    }
     let html = ''
     data.toDo.forEach((item) => {
-      // const tasks = item.data()
+
       console.log(item);
       const li = `
         <li class="collection-item hoverable" style='margin-bottom: 10px'>
-          <div class='collection-item grey lighten-4'>${item.tasks}<a href="#!" class="secondary-content"><i class="material-icons close" onclick="removeTransaction(${item.id})">close</i></a></div>
+          <div class='collection-item grey lighten-4 chew'>${item.tasks}<a href="#!" class="secondary-content"><i class="material-icons close" onclick="removeTransaction(${item.id})">close</i></a></div>
         </li>
       `
       html += li
     })
     guideList.innerHTML = html
   }else{
-    // console.log(data.task.length);
-    // guideList.innerHTML = '<h5 class="center-align">Login or Create tasks!</h5>'
     homeDisplay.style.display = 'block'
     guideList.innerHTML = ''
   }
 }
 
-// DELETE task
-// closeButton.addEventListener('click', () => {
-//   console.log('object');
-//   const UID = db.collection('accounts').doc()
 
-//   const USERid = UID.firestore.QT.credentials.currentUser.uid
-//   console.log(USERid);
-
-//  db.collection('accounts').doc(USERid).delete()
-// })
-
-// Wrap every letter in a span
+// Wrap every letter in a span for h1 title
 var textWrapper = document.querySelector('.ml6 .letters');
 textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
 
-anime.timeline({loop: true})
+anime.timeline({loop: false})
   .add({
     targets: '.ml6 .letter',
     translateY: ["1.1em", 0],
     translateZ: 0,
-    duration: 750,
-    delay: (el, i) => 50 * i
+    duration: 1500,
+    delay: (el, i) => 70 * i
   }).add({
     targets: '.ml6',
     opacity: 0,
     duration: 1000,
     easing: "easeOutExpo",
-    delay: 1000
+    delay: infinite
   });
 

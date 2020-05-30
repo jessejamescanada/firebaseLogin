@@ -26,9 +26,22 @@
   line-height: 1em;
 }
 
+ul .chew.checked {
+  background: #888;
+  color: rgb(245, 62, 62);
+  text-decoration: line-through;
+}
 
 @media(max-width: 500px){
   .ml6{
     font-size: 2.3rem;
   }
+}
+
+.chew{
+  text-transform: capitalize;
+}
+
+.letters2{
+  color: rgb(255, 130, 58);
 }
